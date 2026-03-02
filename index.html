@@ -352,6 +352,72 @@
         [data-theme="dark"] ::-webkit-scrollbar-thumb {
             background: #4b5563;
         }
+
+        /* Word Cloud */
+        .word-cloud-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        [data-theme="dark"] .word-cloud-container {
+            background: #1f2937;
+            border-color: #374151;
+        }
+
+        .word-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            line-height: 1.8;
+            min-height: 200px;
+        }
+
+        .word-cloud-item {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .word-cloud-item:hover {
+            transform: scale(1.15);
+            filter: brightness(1.1);
+        }
+
+        .word-cloud-item.size-xl {
+            font-size: 32px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.15));
+            color: var(--color-primary);
+        }
+
+        .word-cloud-item.size-lg {
+            font-size: 26px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.15));
+            color: #f59e0b;
+        }
+
+        .word-cloud-item.size-md {
+            font-size: 20px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15));
+            color: #10b981;
+        }
+
+        .word-cloud-item.size-sm {
+            font-size: 16px;
+            background: rgba(107, 114, 128, 0.1);
+            color: var(--color-text-light);
+        }
+
+        [data-theme="dark"] .word-cloud-item {
+            filter: brightness(1.2);
+        }
     </style>
 </head>
 <body>
@@ -361,7 +427,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
                 <h1 class="text-4xl md:text-5xl font-bold mb-3">AutoMatRadar</h1>
-                <p class="text-lg md:text-xl opacity-90">汽车材料技术情报系统</p>
+                <p class="text-lg md:text-xl opacity-90 font-medium tracking-wide">Material Tech, Day Day Up</p>
                 <div class="mt-4 inline-flex items-center gap-2 text-sm opacity-80">
                     <span class="material-icons" style="font-size: 18px;">schedule</span>
                     <span>最后更新: <span id="lastUpdate">加载中...</span></span>
@@ -418,6 +484,19 @@
         </div>
     </section>
 
+    <!-- Word Cloud Section -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="word-cloud-container">
+            <h2 class="text-2xl font-bold text-center mb-6" style="color: var(--color-text-dark);">
+                <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">cloud</span>
+                技术关键词
+            </h2>
+            <div id="wordCloud" class="word-cloud">
+                <!-- Dynamic word cloud -->
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Loading State -->
@@ -445,7 +524,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-8 mt-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-sm font-medium text-gray-700">AutoMatRadar | 汽车材料技术情报系统</p>
+            <p class="text-sm font-medium text-gray-700">AutoMatRadar | Material Tech, Day Day Up</p>
             <p class="text-xs mt-2 text-gray-500">数据来源于各网站官方 RSS 源 | 仅供个人学习研究使用</p>
         </div>
     </footer>
@@ -487,6 +566,7 @@
                 document.getElementById('lastUpdate').textContent = data.updateTime || '未知';
 
                 generateCategoryNav();
+                generateWordCloud();
                 renderArticles();
                 hideLoading();
 
@@ -508,6 +588,91 @@
                 pill.textContent = category;
                 pill.onclick = () => switchCategory(category);
                 nav.appendChild(pill);
+            });
+        }
+
+        // Generate Word Cloud
+        function generateWordCloud() {
+            const wordCloudContainer = document.getElementById('wordCloud');
+            wordCloudContainer.innerHTML = '';
+
+            // 定义关键词类别（与金属、非金属、空气健康、腐蚀相关）
+            const targetKeywords = {
+                // 金属相关
+                metal: ['aluminum', 'aluminium', 'steel', 'iron', 'copper', 'zinc', 'magnesium', 'titanium', 'alloy', 'metal', 'metallic', 'chrome', 'nickel', 'tin', 'lead'],
+                // 非金属相关
+                nonMetal: ['polymer', 'plastic', 'composite', 'carbon', 'fiber', 'fibre', 'resin', 'epoxy', 'polyurethane', 'nylon', 'rubber', 'silicone', 'ceramic', 'glass', 'graphene'],
+                // 腐蚀相关
+                corrosion: ['corrosion', 'rust', 'oxidation', 'coating', 'protection', 'anticorrosion', 'galvanization', 'electroplating', 'passivation', 'degradation', 'weathering'],
+                // 空气健康相关
+                health: ['voc', 'emission', 'formaldehyde', 'odor', 'smell', 'toxicity', 'indoor', 'air', 'quality', 'pollutant', 'volatile', 'benzene', 'safety', 'environmental', 'eco'],
+                // 汽车材料工艺
+                process: ['coating', 'paint', 'adhesive', 'welding', 'manufacturing', 'surface', 'treatment', 'finishing', 'recycling', 'sustainable', 'lightweight', 'durability']
+            };
+
+            // 展平所有关键词
+            const allTargetKeywords = new Set();
+            Object.values(targetKeywords).forEach(keywords => {
+                keywords.forEach(kw => allTargetKeywords.add(kw.toLowerCase()));
+            });
+
+            // 统计关键词频率
+            const wordFreq = {};
+
+            allArticles.forEach(article => {
+                const text = `${article.title} ${article.summary || article.description || ''}`.toLowerCase();
+                const words = text.match(/\b[a-z]{3,}\b/g) || [];
+
+                words.forEach(word => {
+                    if (allTargetKeywords.has(word)) {
+                        wordFreq[word] = (wordFreq[word] || 0) + 1;
+                    }
+                });
+            });
+
+            // 按频率排序，取前30个
+            const sortedWords = Object.entries(wordFreq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 30);
+
+            if (sortedWords.length === 0) {
+                wordCloudContainer.innerHTML = '<p class="text-gray-500 text-center">暂无关键词数据</p>';
+                return;
+            }
+
+            // 计算频率分位数，用于分配大小
+            const frequencies = sortedWords.map(([, freq]) => freq);
+            const maxFreq = Math.max(...frequencies);
+            const minFreq = Math.min(...frequencies);
+
+            // 生成词云元素
+            sortedWords.forEach(([word, freq]) => {
+                const span = document.createElement('span');
+
+                // 根据频率分配大小
+                const normalizedFreq = (freq - minFreq) / (maxFreq - minFreq || 1);
+                let sizeClass;
+                if (normalizedFreq > 0.7) {
+                    sizeClass = 'size-xl';
+                } else if (normalizedFreq > 0.4) {
+                    sizeClass = 'size-lg';
+                } else if (normalizedFreq > 0.2) {
+                    sizeClass = 'size-md';
+                } else {
+                    sizeClass = 'size-sm';
+                }
+
+                span.className = `word-cloud-item ${sizeClass}`;
+                span.textContent = word;
+                span.title = `${word} (${freq}次)`;
+                span.onclick = () => {
+                    document.getElementById('searchInput').value = word;
+                    handleSearch();
+                    // 滚动到文章列表
+                    document.getElementById('articleList').scrollIntoView({ behavior: 'smooth' });
+                };
+
+                wordCloudContainer.appendChild(span);
             });
         }
 
