@@ -5,182 +5,291 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoMatRadar - 汽车材料技术情报系统</title>
 
-    <!-- Chart.js 数据可视化库 -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --color-light-gray: rgb(204, 204, 204);
-            --color-dark-gray: rgb(102, 102, 102);
-            --color-warm-gold: rgb(206, 164, 114);
-            --color-primary: var(--color-dark-gray);
-            --color-accent: var(--color-warm-gold);
+            --color-primary: #2563eb;
+            --color-secondary: #7c3aed;
+            --color-accent: #f59e0b;
+            --color-success: #10b981;
+            --color-text-dark: #1f2937;
+            --color-text-light: #6b7280;
+            --color-bg-light: #f9fafb;
         }
 
         [data-theme="dark"] {
-            --color-light-gray: rgb(51, 51, 51);
-            --color-dark-gray: rgb(204, 204, 204);
-            --color-warm-gold: rgb(206, 164, 114);
-            --color-primary: var(--color-dark-gray);
-            --color-accent: var(--color-warm-gold);
+            --color-primary: #60a5fa;
+            --color-secondary: #a78bfa;
+            --color-accent: #fbbf24;
+            --color-success: #34d399;
+            --color-text-dark: #f9fafb;
+            --color-text-light: #d1d5db;
+            --color-bg-light: #1f2937;
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-        }
-
-        /* Hero 区域渐变背景 */
-        .hero-gradient {
-            background: linear-gradient(135deg, var(--color-dark-gray) 0%, rgba(102, 102, 102, 0.9) 100%);
-        }
-
-        [data-theme="dark"] {
-            background: #1a1a1a;
-            color: #e0e0e0;
-        }
-
-        [data-theme="dark"] .hero-gradient {
-            background: linear-gradient(135deg, rgb(51, 51, 51) 0%, rgba(51, 51, 51, 0.95) 100%);
-        }
-
-        [data-theme="dark"] .stat-card,
-        [data-theme="dark"] .article-card,
-        [data-theme="dark"] .chart-container {
-            background: #2a2a2a;
-            border-color: rgba(206, 164, 114, 0.2);
+            background: var(--color-bg-light);
+            color: var(--color-text-dark);
         }
 
         [data-theme="dark"] body {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            background: #111827;
         }
 
-        [data-theme="dark"] nav {
-            background: #2a2a2a;
-            border-color: rgba(206, 164, 114, 0.1);
-        }
-
-        [data-theme="dark"] footer {
-            background: #2a2a2a;
-            border-color: rgba(206, 164, 114, 0.1);
-        }
-
-        /* 卡片样式 */
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            border-left: 3px solid var(--color-warm-gold);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 文章卡片 */
-        .article-card {
-            background: white;
-            border-radius: 12px;
-            padding: 18px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(204, 204, 204, 0.3);
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
             position: relative;
             overflow: hidden;
         }
 
-        .article-card::before {
+        .hero-section::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--color-dark-gray), var(--color-warm-gold));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
 
-        .article-card:hover::before {
-            transform: scaleX(1);
+        /* Search Container */
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        .article-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-color: var(--color-warm-gold);
-        }
-
-        /* 分类按钮 */
-        .category-btn {
-            transition: all 0.2s ease;
-            border: 2px solid transparent;
-        }
-
-        .category-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .category-btn.active {
-            background: var(--color-dark-gray);
-            color: white;
-            border-color: var(--color-warm-gold);
-        }
-
-        /* 搜索和筛选栏 */
-        .search-bar {
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
             background: white;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--color-light-gray);
+            border-radius: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        [data-theme="dark"] .search-bar {
-            background: #2a2a2a;
-            border-color: rgba(206, 164, 114, 0.2);
+        .search-input-wrapper:focus-within {
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
         }
 
         .search-input {
-            border: 1px solid var(--color-light-gray);
-            border-radius: 8px;
-            padding: 10px 16px;
+            flex: 1;
+            padding: 18px 24px 18px 60px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            background: transparent;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 24px;
+            color: var(--color-text-light);
+        }
+
+        /* Category Pills */
+        .category-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 50px;
             font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid #e5e7eb;
+            background: white;
+            color: var(--color-text-dark);
+        }
+
+        .category-pill:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        .category-pill.active {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        [data-theme="dark"] .category-pill {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f9fafb;
+        }
+
+        /* Article Card */
+        .article-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            gap: 0;
+        }
+
+        .article-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+        }
+
+        [data-theme="dark"] .article-card {
+            background: #1f2937;
+            border-color: #374151;
+        }
+
+        .article-accent {
+            width: 6px;
+            background: linear-gradient(180deg, var(--color-primary), var(--color-secondary));
+            flex-shrink: 0;
+        }
+
+        .article-content {
+            flex: 1;
+            padding: 24px;
+        }
+
+        .article-title {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--color-text-dark);
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .article-title:hover {
+            color: var(--color-primary);
+        }
+
+        .article-excerpt {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--color-text-light);
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: var(--color-text-light);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-category {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1));
+            color: var(--color-primary);
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .badge-source {
+            background: #f3f4f6;
+            color: var(--color-text-light);
+        }
+
+        [data-theme="dark"] .badge-source {
+            background: #374151;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        [data-theme="dark"] .filter-bar {
+            background: #1f2937;
+            border-color: #374151;
+        }
+
+        .filter-select {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .search-input:focus {
+        .filter-select:hover {
+            border-color: var(--color-primary);
+        }
+
+        .filter-select:focus {
             outline: none;
-            border-color: var(--color-warm-gold);
-            box-shadow: 0 0 0 3px rgba(206, 164, 114, 0.1);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        [data-theme="dark"] .search-input {
-            background: #1a1a1a;
-            border-color: rgba(206, 164, 114, 0.3);
-            color: #e0e0e0;
+        [data-theme="dark"] .filter-select {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f9fafb;
         }
 
-        /* 深色模式切换按钮 */
+        /* Theme Toggle */
         .theme-toggle {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
+            bottom: 32px;
+            right: 32px;
             width: 56px;
             height: 56px;
             border-radius: 50%;
-            background: var(--color-warm-gold);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             color: white;
             border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
             cursor: pointer;
             transition: all 0.3s ease;
             z-index: 1000;
@@ -190,51 +299,17 @@
         }
 
         .theme-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 12px 32px rgba(37, 99, 235, 0.5);
         }
 
-        /* NEW 标签 */
-        .new-badge {
-            background: linear-gradient(135deg, #ff6b6b, #ff8787);
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 4px;
-            letter-spacing: 0.5px;
-        }
-
-        /* 标签云 */
-        .tag-cloud {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .tag-item {
-            padding: 6px 16px;
-            background: linear-gradient(135deg, rgba(0, 45, 40, 0.05), rgba(206, 164, 114, 0.05));
-            border-radius: 20px;
-            font-size: 13px;
-            color: var(--color-dark-gray);
-            transition: all 0.2s ease;
-            border: 1px solid rgba(206, 164, 114, 0.2);
-        }
-
-        .tag-item:hover {
-            background: var(--color-warm-gold);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* 加载动画 */
+        /* Loading & Empty States */
         .loader {
-            border: 3px solid var(--color-light-gray);
-            border-top: 3px solid var(--color-deep-green);
-            border-radius: 50%;
             width: 48px;
             height: 48px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid var(--color-primary);
+            border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
@@ -243,245 +318,161 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* 分享按钮 */
-        .share-btn {
-            background: rgba(206, 164, 114, 0.1);
-            color: var(--color-warm-gold);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            transition: all 0.2s ease;
-            border: 1px solid rgba(206, 164, 114, 0.3);
+        /* Highlight */
+        mark {
+            background: rgba(245, 158, 11, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
         }
 
-        .share-btn:hover {
-            background: var(--color-warm-gold);
-            color: white;
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
 
-        /* 图标样式 */
-        .material-icons {
-            vertical-align: middle;
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
         }
 
-        /* 图表容器 */
-        .chart-container {
-            position: relative;
-            height: 280px;
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        [data-theme="dark"] ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+
+        [data-theme="dark"] ::-webkit-scrollbar-thumb {
+            background: #4b5563;
         }
     </style>
 </head>
 <body>
 
     <!-- Hero Section -->
-    <section class="hero-gradient text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl font-bold mb-3">AutoMatRadar</h1>
-                <p class="text-lg opacity-90 mb-2">汽车材料技术情报系统 | 仅供个人研究、学习使用</p>
-                <p class="text-xs opacity-75">每日 8:50 自动依据相关性及时效性更新 50 篇资讯</p>
-                <div class="mt-4 inline-flex items-center px-3 py-2 bg-white bg-opacity-20 rounded-lg">
-                    <span class="material-icons text-sm mr-2">schedule</span>
-                    <span class="text-sm">最后更新: <span id="lastUpdate">加载中...</span></span>
+    <section class="hero-section text-white py-16 md:py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl md:text-5xl font-bold mb-3">AutoMatRadar</h1>
+                <p class="text-lg md:text-xl opacity-90">汽车材料技术情报系统</p>
+                <div class="mt-4 inline-flex items-center gap-2 text-sm opacity-80">
+                    <span class="material-icons" style="font-size: 18px;">schedule</span>
+                    <span>最后更新: <span id="lastUpdate">加载中...</span></span>
+                </div>
+            </div>
+
+            <!-- Search -->
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <span class="material-icons search-icon">search</span>
+                    <input type="text"
+                           id="searchInput"
+                           class="search-input"
+                           placeholder="搜索技术资讯、材料创新..."
+                           oninput="handleSearch()">
+                    <button onclick="resetFilters()"
+                            class="px-6 py-3 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span class="material-icons">refresh</span>
+                    </button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Stats Dashboard -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div class="stat-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium" style="color: var(--color-dark-gray)">总文章数</p>
-                        <p class="text-2xl font-bold mt-1" style="color: var(--color-primary)" id="totalCount">0</p>
-                    </div>
-                    <span class="material-icons text-3xl" style="color: var(--color-warm-gold)">article</span>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium" style="color: var(--color-dark-gray)">材料创新</p>
-                        <p class="text-2xl font-bold mt-1" style="color: var(--color-primary)" id="innovationCount">0</p>
-                    </div>
-                    <span class="material-icons text-3xl" style="color: var(--color-warm-gold)">science</span>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium" style="color: var(--color-dark-gray)">汽车防腐</p>
-                        <p class="text-2xl font-bold mt-1" style="color: var(--color-primary)" id="corrosionCount">0</p>
-                    </div>
-                    <span class="material-icons text-3xl" style="color: var(--color-warm-gold)">shield</span>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium" style="color: var(--color-dark-gray)">车内健康</p>
-                        <p class="text-2xl font-bold mt-1" style="color: var(--color-primary)" id="healthCount">0</p>
-                    </div>
-                    <span class="material-icons text-3xl" style="color: var(--color-warm-gold)">health_and_safety</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Charts Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- 分类分布图 -->
-            <div class="chart-container" style="position: relative;">
-                <h3 class="text-lg font-bold mb-4" style="color: var(--color-primary)">
-                    <span class="material-icons text-sm mr-1">pie_chart</span>
-                    分类分布
-                </h3>
-                <div style="display: flex; align-items: flex-start; height: 240px; padding-top: 10px;">
-                    <!-- 左侧图例 -->
-                    <div id="categoryLegend" style="width: 120px; display: flex; flex-direction: column; justify-content: center; gap: 8px;">
-                        <!-- 动态生成图例 -->
-                    </div>
-                    <!-- 右侧图表 -->
-                    <div style="flex: 1; height: 180px; margin-top: -10px;">
-                        <canvas id="categoryChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 热门标签云 -->
-            <div class="chart-container">
-                <h3 class="text-lg font-bold mb-4" style="color: var(--color-primary)">
-                    <span class="material-icons text-sm mr-1">local_offer</span>
-                    热门标签
-                </h3>
-                <div id="tagCloud" class="tag-cloud" style="height: 260px; overflow-y: auto; display: flex; flex-wrap: wrap; align-content: flex-start;">
-                    <!-- 动态生成 -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 搜索和筛选栏 -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-        <div class="search-bar">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                <!-- 搜索框 -->
-                <div class="md:col-span-5">
-                    <div class="relative">
-                        <span class="material-icons absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">search</span>
-                        <input type="text" id="searchInput" placeholder="搜索标题或摘要..."
-                               class="search-input w-full pl-10 pr-4"
-                               oninput="handleSearch()">
-                    </div>
+    <!-- Category Navigation -->
+    <section class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 py-4" style="backdrop-filter: blur(12px);">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+                <!-- Categories -->
+                <div class="flex items-center gap-3 flex-wrap" id="categoryNav">
+                    <!-- Dynamic -->
                 </div>
 
-                <!-- 日期范围筛选 -->
-                <div class="md:col-span-3">
-                    <select id="dateFilter" class="search-input w-full" onchange="handleFilter()">
+                <!-- Filters -->
+                <div class="flex items-center gap-3">
+                    <select id="dateFilter" class="filter-select" onchange="handleFilter()">
                         <option value="all">所有时间</option>
                         <option value="today">今天</option>
                         <option value="week">最近7天</option>
                         <option value="month">最近30天</option>
                     </select>
-                </div>
 
-                <!-- 排序 -->
-                <div class="md:col-span-2">
-                    <select id="sortOrder" class="search-input w-full" onchange="handleSort()">
+                    <select id="sortOrder" class="filter-select" onchange="handleSort()">
                         <option value="newest">最新优先</option>
                         <option value="oldest">最早优先</option>
                     </select>
                 </div>
-
-                <!-- 重置按钮 -->
-                <div class="md:col-span-2">
-                    <button onclick="resetFilters()"
-                            class="w-full px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                            style="background: var(--color-light-gray); color: var(--color-dark-gray)">
-                        <span class="material-icons text-sm mr-1" style="vertical-align: middle;">refresh</span>
-                        重置
-                    </button>
-                </div>
             </div>
 
-            <!-- 结果统计 -->
-            <div class="mt-3 text-sm" style="color: var(--color-dark-gray)">
+            <!-- Result Stats -->
+            <div class="mt-3 text-sm text-gray-600">
                 <span id="resultStats">显示全部文章</span>
             </div>
         </div>
     </section>
 
-    <!-- 分类导航 -->
-    <nav class="sticky top-0 z-40 bg-white shadow-sm mb-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex overflow-x-auto py-4 space-x-3" id="categoryNav">
-                <!-- 动态生成 -->
-            </div>
-        </div>
-    </nav>
-
-    <!-- 文章列表 -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <!-- 加载状态 -->
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Loading State -->
         <div id="loadingState" class="flex flex-col items-center justify-center py-20">
             <div class="loader"></div>
-            <p class="mt-6 font-medium" style="color: var(--color-dark-gray)">正在加载资讯...</p>
+            <p class="mt-6 font-medium text-gray-600">正在加载资讯...</p>
         </div>
 
-        <!-- 文章列表 -->
-        <div id="articleList" class="space-y-4 hidden">
-            <!-- 动态生成 -->
+        <!-- Article List -->
+        <div id="articleList" class="space-y-6 hidden">
+            <!-- Dynamic -->
         </div>
 
-        <!-- 空状态 -->
+        <!-- Empty State -->
         <div id="emptyState" class="text-center py-20 hidden">
-            <span class="material-icons text-6xl" style="color: var(--color-light-gray)">article</span>
-            <p class="mt-4 text-lg" style="color: var(--color-dark-gray)">暂无相关资讯</p>
+            <span class="material-icons text-6xl text-gray-300">article</span>
+            <p class="mt-4 text-lg text-gray-600">暂无相关资讯</p>
+            <button onclick="resetFilters()"
+                    class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors">
+                重置筛选条件
+            </button>
         </div>
     </main>
 
-    <!-- 深色模式切换按钮 -->
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm font-medium text-gray-700">AutoMatRadar | 汽车材料技术情报系统</p>
+            <p class="text-xs mt-2 text-gray-500">数据来源于各网站官方 RSS 源 | 仅供个人学习研究使用</p>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle -->
     <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
         <span class="material-icons" id="themeIcon">dark_mode</span>
     </button>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-sm font-medium" style="color: var(--color-dark-gray)">AutoMatRadar | 汽车材料技术情报系统</p>
-            <p class="text-xs mt-2" style="color: var(--color-light-gray)">数据来源于各网站官方 RSS 源 | 仅供个人学习研究使用</p>
-        </div>
-    </footer>
-
     <script>
-        // 全局变量
+        // Global Variables
         let allArticles = [];
         let filteredArticles = [];
         let currentCategory = '全部';
         let categories = [];
-        let categoryChart;
         let searchKeyword = '';
         let dateFilter = 'all';
         let sortOrder = 'newest';
 
-        // 初始化
+        // Initialize
         async function init() {
             console.log('🚀 初始化中...');
             initTheme();
             await loadData();
         }
 
-        // 加载数据
+        // Load Data
         async function loadData() {
             try {
                 const timestamp = new Date().getTime();
@@ -495,9 +486,6 @@
 
                 document.getElementById('lastUpdate').textContent = data.updateTime || '未知';
 
-                updateStats();
-                generateCharts();
-                generateTagCloud();
                 generateCategoryNav();
                 renderArticles();
                 hideLoading();
@@ -509,155 +497,48 @@
             }
         }
 
-        // 更新统计数据
-        function updateStats() {
-            document.getElementById('totalCount').textContent = allArticles.length;
-            document.getElementById('innovationCount').textContent =
-                allArticles.filter(a => a.category === '材料创新').length;
-            document.getElementById('corrosionCount').textContent =
-                allArticles.filter(a => a.category === '汽车防腐').length;
-            document.getElementById('healthCount').textContent =
-                allArticles.filter(a => a.category === '车内健康').length;
-        }
-
-        // 生成图表
-        function generateCharts() {
-            // 分类分布饼图 - 只显示3个分类
-            const categoryCounts = {};
-            categories.forEach(cat => {
-                categoryCounts[cat] = allArticles.filter(a => a.category === cat).length;
-            });
-
-            const colors = [
-                'rgba(102, 102, 102, 0.85)',     // 深灰 - 材料创新
-                'rgba(206, 164, 114, 0.85)',     // 暖金 - 汽车防腐
-                'rgba(153, 153, 153, 0.85)'      // 中灰 - 车内健康
-            ];
-
-            // 生成左侧自定义图例
-            const legendContainer = document.getElementById('categoryLegend');
-            legendContainer.innerHTML = '';
-            categories.forEach((cat, index) => {
-                const legendItem = document.createElement('div');
-                legendItem.style.cssText = 'display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-dark-gray);';
-                legendItem.innerHTML = `
-                    <span style="width: 12px; height: 12px; background: ${colors[index]}; border-radius: 50%; display: inline-block;"></span>
-                    <span>${cat}</span>
-                `;
-                legendContainer.appendChild(legendItem);
-            });
-
-            const ctx1 = document.getElementById('categoryChart');
-            categoryChart = new Chart(ctx1, {
-                type: 'doughnut',
-                data: {
-                    labels: categories,
-                    datasets: [{
-                        data: Object.values(categoryCounts),
-                        backgroundColor: colors,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            display: false  // 隐藏默认图例
-                        }
-                    }
-                }
-            });
-        }
-
-        // 生成标签云
-        function generateTagCloud() {
-            const tagCloud = document.getElementById('tagCloud');
-            tagCloud.innerHTML = '';
-
-            // 从文章中提取关键词
-            const wordFreq = {};
-            const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'from', 'is', 'are', 'was', 'were']);
-
-            allArticles.forEach(article => {
-                const text = `${article.title} ${article.summary || article.description || ''}`.toLowerCase();
-                const words = text.match(/\b[a-z]{3,}\b/g) || [];
-
-                words.forEach(word => {
-                    if (!stopWords.has(word)) {
-                        wordFreq[word] = (wordFreq[word] || 0) + 1;
-                    }
-                });
-            });
-
-            // 按频率排序并取前20个
-            const topWords = Object.entries(wordFreq)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 20);
-
-            topWords.forEach(([word, freq]) => {
-                const tag = document.createElement('span');
-                tag.className = 'tag-item';
-                tag.textContent = `${word} (${freq})`;
-                tag.style.cursor = 'pointer';
-                tag.onclick = () => {
-                    document.getElementById('searchInput').value = word;
-                    handleSearch();
-                };
-                tagCloud.appendChild(tag);
-            });
-        }
-
-        // 生成分类导航
+        // Generate Category Navigation
         function generateCategoryNav() {
             const nav = document.getElementById('categoryNav');
             const allCategories = ['全部', ...categories];
 
             allCategories.forEach(category => {
-                const button = document.createElement('button');
-                button.className = `category-btn px-6 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
-                    category === currentCategory ? 'active' : ''
-                }`;
-                button.style.cssText = category === currentCategory
-                    ? 'background: var(--color-dark-gray); color: white; border-color: var(--color-warm-gold);'
-                    : 'background: white; color: var(--color-dark-gray);';
-                button.textContent = category;
-                button.onclick = () => switchCategory(category);
-                nav.appendChild(button);
+                const pill = document.createElement('button');
+                pill.className = `category-pill ${category === currentCategory ? 'active' : ''}`;
+                pill.textContent = category;
+                pill.onclick = () => switchCategory(category);
+                nav.appendChild(pill);
             });
         }
 
-        // 切换分类
+        // Switch Category
         function switchCategory(category) {
             currentCategory = category;
 
-            // 更新按钮样式
-            const buttons = document.querySelectorAll('#categoryNav button');
-            buttons.forEach(btn => {
-                if (btn.textContent === category) {
-                    btn.classList.add('active');
-                    btn.style.cssText = 'background: var(--color-dark-gray); color: white; border-color: var(--color-warm-gold);';
+            const pills = document.querySelectorAll('.category-pill');
+            pills.forEach(pill => {
+                if (pill.textContent === category) {
+                    pill.classList.add('active');
                 } else {
-                    btn.classList.remove('active');
-                    btn.style.cssText = 'background: white; color: var(--color-dark-gray);';
+                    pill.classList.remove('active');
                 }
             });
 
             renderArticles();
         }
 
-        // 渲染文章
+        // Render Articles
         function renderArticles() {
             const container = document.getElementById('articleList');
             const emptyState = document.getElementById('emptyState');
             container.innerHTML = '';
 
-            // 应用分类过滤
+            // Apply filters
             let filtered = currentCategory === '全部'
                 ? allArticles
                 : allArticles.filter(a => a.category === currentCategory);
 
-            // 应用搜索过滤
+            // Search filter
             if (searchKeyword) {
                 const keyword = searchKeyword.toLowerCase();
                 filtered = filtered.filter(a => {
@@ -667,7 +548,7 @@
                 });
             }
 
-            // 应用日期过滤
+            // Date filter
             if (dateFilter !== 'all') {
                 const now = new Date();
                 const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -683,7 +564,7 @@
                 });
             }
 
-            // 排序
+            // Sort
             filtered.sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
@@ -708,7 +589,7 @@
             });
         }
 
-        // 创建文章卡片
+        // Create Article Card
         function createArticleCard(article) {
             const card = document.createElement('div');
             card.className = 'article-card';
@@ -720,61 +601,61 @@
                 day: '2-digit'
             });
 
-            // 判断是否为24小时内的新文章
+            // Check if new (24 hours)
             const now = new Date();
             const hoursDiff = (now - date) / (1000 * 60 * 60);
             const isNew = hoursDiff <= 24;
 
-            // 提取RSS源名称
+            // Extract source
             const source = article.source || extractSourceFromLink(article.link);
 
-            // 高亮关键词
+            // Highlight keywords
             const title = highlightKeyword(article.title);
             const summary = highlightKeyword(article.summary || article.description);
 
             card.innerHTML = `
-                <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center space-x-3 flex-wrap gap-2">
-                        <span class="material-icons text-sm" style="color: var(--color-warm-gold)">schedule</span>
-                        <span class="text-sm" style="color: var(--color-dark-gray)">${dateStr}</span>
-                        ${isNew ? '<span class="new-badge">NEW</span>' : ''}
-                        <span class="px-3 py-1 rounded-full text-xs font-medium"
-                              style="background: rgba(206, 164, 114, 0.15); color: var(--color-primary)">
-                            ${escapeHtml(article.category)}
+                <div class="article-accent"></div>
+                <div class="article-content">
+                    <div class="article-meta mb-3">
+                        <span class="flex items-center gap-1">
+                            <span class="material-icons" style="font-size: 16px;">event</span>
+                            ${dateStr}
                         </span>
-                        ${source ? `<span class="text-xs px-2 py-1 rounded" style="background: rgba(102, 102, 102, 0.1); color: var(--color-dark-gray)">
-                            <span class="material-icons" style="font-size: 12px; vertical-align: middle;">rss_feed</span>
+                        ${isNew ? '<span class="badge badge-new">NEW</span>' : ''}
+                        <span class="badge badge-category">${escapeHtml(article.category)}</span>
+                        ${source ? `<span class="badge badge-source">
+                            <span class="material-icons" style="font-size: 12px; margin-right: 4px;">rss_feed</span>
                             ${escapeHtml(source)}
                         </span>` : ''}
                     </div>
-                    <button class="share-btn" onclick="shareArticle('${escapeHtml(article.link)}', '${escapeHtml(article.title)}')">
-                        <span class="material-icons text-sm">share</span>
-                        分享
-                    </button>
+
+                    <h2 class="article-title" onclick="window.open('${escapeHtml(article.link)}', '_blank')">
+                        ${title}
+                    </h2>
+
+                    <p class="article-excerpt">
+                        ${summary}
+                    </p>
+
+                    <div class="flex items-center gap-4">
+                        <button onclick="window.open('${escapeHtml(article.link)}', '_blank')"
+                                class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1 transition-colors">
+                            阅读全文
+                            <span class="material-icons" style="font-size: 16px;">arrow_forward</span>
+                        </button>
+                        <button onclick="shareArticle('${escapeHtml(article.link)}', '${escapeHtml(article.title)}')"
+                                class="text-gray-600 hover:text-gray-700 font-medium text-sm flex items-center gap-1 transition-colors">
+                            <span class="material-icons" style="font-size: 16px;">share</span>
+                            分享
+                        </button>
+                    </div>
                 </div>
-
-                <h3 class="text-lg font-bold mb-3 cursor-pointer transition-colors hover:opacity-80"
-                    style="color: var(--color-primary)"
-                    onclick="window.open('${escapeHtml(article.link)}', '_blank')">
-                    ${title}
-                </h3>
-
-                <p class="text-sm leading-relaxed mb-4" style="color: var(--color-dark-gray)">
-                    ${summary}
-                </p>
-
-                <button onclick="window.open('${escapeHtml(article.link)}', '_blank')"
-                        class="inline-flex items-center text-sm font-medium transition-colors"
-                        style="color: var(--color-warm-gold)">
-                    查看原文
-                    <span class="material-icons text-sm ml-1">arrow_forward</span>
-                </button>
             `;
 
             return card;
         }
 
-        // 从链接中提取来源
+        // Extract Source from Link
         function extractSourceFromLink(link) {
             try {
                 const url = new URL(link);
@@ -785,16 +666,16 @@
             }
         }
 
-        // 高亮关键词
+        // Highlight Keyword
         function highlightKeyword(text) {
             if (!searchKeyword || !text) return escapeHtml(text);
 
             const escapedText = escapeHtml(text);
             const regex = new RegExp(`(${searchKeyword})`, 'gi');
-            return escapedText.replace(regex, '<mark style="background: rgba(206, 164, 114, 0.3); padding: 2px 4px; border-radius: 2px;">$1</mark>');
+            return escapedText.replace(regex, '<mark>$1</mark>');
         }
 
-        // 分享文章
+        // Share Article
         function shareArticle(url, title) {
             if (navigator.share) {
                 navigator.share({ title, url });
@@ -804,52 +685,32 @@
             }
         }
 
-        // HTML转义
+        // HTML Escape
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text || '';
             return div.innerHTML;
         }
 
-        // 隐藏加载状态
-        function hideLoading() {
-            document.getElementById('loadingState').classList.add('hidden');
-            document.getElementById('articleList').classList.remove('hidden');
-        }
-
-        // 显示错误
-        function showError() {
-            const loadingState = document.getElementById('loadingState');
-            loadingState.innerHTML = `
-                <span class="material-icons text-6xl" style="color: var(--color-light-gray)">error_outline</span>
-                <p class="mt-4 text-lg" style="color: var(--color-dark-gray)">加载失败</p>
-                <button onclick="location.reload()"
-                        class="mt-4 px-6 py-2 rounded-lg text-white"
-                        style="background: var(--color-dark-gray)">
-                    重新加载
-                </button>
-            `;
-        }
-
-        // 搜索处理
+        // Search Handler
         function handleSearch() {
             searchKeyword = document.getElementById('searchInput').value.trim();
             renderArticles();
         }
 
-        // 筛选处理
+        // Filter Handler
         function handleFilter() {
             dateFilter = document.getElementById('dateFilter').value;
             renderArticles();
         }
 
-        // 排序处理
+        // Sort Handler
         function handleSort() {
             sortOrder = document.getElementById('sortOrder').value;
             renderArticles();
         }
 
-        // 重置筛选
+        // Reset Filters
         function resetFilters() {
             document.getElementById('searchInput').value = '';
             document.getElementById('dateFilter').value = 'all';
@@ -859,22 +720,19 @@
             sortOrder = 'newest';
             currentCategory = '全部';
 
-            // 重置分类导航按钮
-            const buttons = document.querySelectorAll('#categoryNav button');
-            buttons.forEach(btn => {
-                if (btn.textContent === '全部') {
-                    btn.classList.add('active');
-                    btn.style.cssText = 'background: var(--color-dark-gray); color: white; border-color: var(--color-warm-gold);';
+            const pills = document.querySelectorAll('.category-pill');
+            pills.forEach(pill => {
+                if (pill.textContent === '全部') {
+                    pill.classList.add('active');
                 } else {
-                    btn.classList.remove('active');
-                    btn.style.cssText = 'background: white; color: var(--color-dark-gray);';
+                    pill.classList.remove('active');
                 }
             });
 
             renderArticles();
         }
 
-        // 更新结果统计
+        // Update Result Stats
         function updateResultStats() {
             const stats = document.getElementById('resultStats');
             if (searchKeyword || dateFilter !== 'all' || currentCategory !== '全部') {
@@ -884,7 +742,26 @@
             }
         }
 
-        // 深色模式
+        // Hide Loading
+        function hideLoading() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('articleList').classList.remove('hidden');
+        }
+
+        // Show Error
+        function showError() {
+            const loadingState = document.getElementById('loadingState');
+            loadingState.innerHTML = `
+                <span class="material-icons text-6xl text-gray-300">error_outline</span>
+                <p class="mt-4 text-lg text-gray-600">加载失败</p>
+                <button onclick="location.reload()"
+                        class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors">
+                    重新加载
+                </button>
+            `;
+        }
+
+        // Theme Functions
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
@@ -902,7 +779,7 @@
             localStorage.setItem('theme', newTheme);
         }
 
-        // 页面加载
+        // Page Load
         window.addEventListener('DOMContentLoaded', init);
     </script>
 
