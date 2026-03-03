@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: 设置Node.js
         uses: actions/setup-node@v4
@@ -33,10 +35,25 @@ jobs:
           cd scripts
           node fetch-rss.js
 
-      - name: 提交数据文件
+      - name: 提交并推送数据文件
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/news.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "🤖 自动更新RSS数据 $(date +'%Y-%m-%d %H:%M')"
-          git push
+
+          # 检查是否有变化
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "没有变化，跳过提交"
+            exit 0
+          fi
+
+          # 提交变化
+          git commit -m "🤖 自动更新RSS数据 $(date +'%Y-%m-%d %H:%M')"
+
+          # 尝试推送，如果失败则先拉取再推送
+          if ! git push; then
+            echo "推送失败，尝试同步远程更改..."
+            git pull --rebase origin main
+            git push
+          fi
+
